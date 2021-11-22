@@ -27,6 +27,8 @@ export const useInvoice = (props: UseInvoiceProps) => {
   const resetHighlights = () => {
     setExpectedHours(undefined);
     setHighlightedDates([]);
+
+    setOmittedDates([]);
   };
   const getDaysBetweenDates = useCallback(
     (start: Date, end: Date, dayName: keyof typeof DAYS) => {
@@ -63,7 +65,7 @@ export const useInvoice = (props: UseInvoiceProps) => {
       return allBillable;
     }, [] as Date[]);
     setHighlightedDates(allBillableDays);
-    setExpectedHours(allBillableDays.length * workingHours);
+    if (workingHours) setExpectedHours(allBillableDays.length * workingHours);
     return allBillableDays;
   }, [
     getDaysBetweenDates,
