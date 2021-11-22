@@ -31,7 +31,6 @@ function App() {
   const {
     omittedDates,
     expectedHours,
-    workingHours,
     setWorkingHours,
     setWorkingDays,
     setOmittedDates,
