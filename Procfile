@@ -1,1 +1,1 @@
-web: yarn build && npx serve -s build
+web: npx serve -s build
