@@ -50,3 +50,10 @@
   background-color: #d32222 !important;
   color: #fff;
 }
+
+
+.react-datepicker__day--highlighted-2 {
+  border-radius: 0.3rem;
+  background-color: #d319d3 !important;
+  color: #fff;
+}

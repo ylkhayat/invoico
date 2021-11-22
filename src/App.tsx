@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { useInvoice } from "./hooks/useInvoice";
 import DatePicker from "react-datepicker";
@@ -8,8 +8,12 @@ import { Button, Typography } from "antd";
 import { Input } from "antd";
 import { Checkbox } from "antd";
 import { isDate } from "lodash";
+import HolidaysClass from "date-holidays";
+import { Select } from "antd";
+const { Option } = Select;
 
-const { Text } = Typography;
+const Holidays = new HolidaysClass();
+const { Text, Paragraph } = Typography;
 
 const options = [
   { label: "Sunday", value: "sun" },
@@ -23,24 +27,50 @@ const options = [
 
 const defaultOptions = ["mon", "tue", "wed", "thu", "fri"];
 
+const refreeDay = 24;
+const today = new Date();
+const defaultStartDate = new Date(
+  today.getFullYear(),
+  today.getMonth() - (today.getDate() > refreeDay ? 0 : 1),
+  24
+);
+
+const defaultEndDate = new Date(
+  today.getFullYear(),
+  today.getMonth() + (today.getDate() > refreeDay ? 1 : 0),
+  23
+);
+
+const ALL_COUNTRIES = Holidays.getCountries();
+
 function App() {
   const [selectMode, setSelectMode] = useState(false);
   const [[startDate, endDate], setRangeDates] = useState<
     [Date | null, Date | null]
-  >([null, null]);
+  >([defaultStartDate, defaultEndDate]);
   const {
+    holidays,
     omittedDates,
     expectedHours,
     setWorkingHours,
     setWorkingDays,
     setOmittedDates,
     highlightedDates,
+    setHolidays,
     resetHighlights,
     getBillableHours,
   } = useInvoice({
     startDate,
     endDate,
   });
+
+  useEffect(() => {
+    setHolidays(
+      new HolidaysClass("EG")
+        .getHolidays(today.getFullYear())
+        .map(({ start }) => start)
+    );
+  }, [setHolidays]);
 
   return (
     <div className="App">
@@ -90,6 +120,7 @@ function App() {
             highlightDates={[
               { "react-datepicker__day--highlighted": highlightedDates },
               { "react-datepicker__day--highlighted-1": omittedDates },
+              { "react-datepicker__day--highlighted-2": holidays },
             ]}
             onChange={(input) => {
               console.log({ input });
@@ -120,9 +151,34 @@ function App() {
             }}
             isClearable={true}
           />
-          <Button onClick={() => setSelectMode((prevMode) => !prevMode)}>
-            {selectMode ? "Select your date range" : "Select your vacations 🎉"}
-          </Button>
+          <div style={{ flexDirection: "column", display: "flex" }}>
+            <Button onClick={() => setSelectMode((prevMode) => !prevMode)}>
+              {selectMode
+                ? "Select your date range"
+                : "Manuallay select your vacations 🎉"}
+            </Button>
+
+            <div style={{ marginTop: 50, marginBottom: 20 }}>
+              <Text type="success">Holidays? No Problemo</Text>
+            </div>
+            <Select
+              showSearch
+              defaultValue={"EG"}
+              onChange={(newCountry) => {
+                setHolidays(
+                  new HolidaysClass(newCountry)
+                    .getHolidays(today.getFullYear())
+                    .map(({ start }) => start)
+                );
+              }}
+            >
+              {Object.keys(ALL_COUNTRIES).map((countryKey) => (
+                <Option key={countryKey} value={countryKey}>
+                  {ALL_COUNTRIES[countryKey]}
+                </Option>
+              ))}
+            </Select>
+          </div>
         </div>
 
         <Button onClick={() => getBillableHours()}>
