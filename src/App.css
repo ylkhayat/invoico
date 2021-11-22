@@ -37,6 +37,8 @@
   }
 }
 
+
+
 .react-datepicker__day--highlighted {
   border-radius: 0.3rem;
   background-color: #3dcc4a !important;
@@ -45,6 +47,6 @@
 
 .react-datepicker__day--highlighted-1 {
   border-radius: 0.3rem;
-  background-color: #0b4734 !important;
+  background-color: #d32222 !important;
   color: #fff;
 }

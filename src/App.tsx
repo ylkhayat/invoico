@@ -48,7 +48,10 @@ function App() {
         <div style={{ marginBottom: 50 }}>
           <Text underline>invoi.co</Text>
         </div>
-        <div style={{ marginBottom: 20 }}>
+
+        <div
+          style={{ marginBottom: 20, flexDirection: "row", display: "flex" }}
+        >
           <Checkbox.Group
             options={options}
             defaultValue={defaultOptions}
@@ -76,10 +79,12 @@ function App() {
         >
           <DatePicker
             inline
-            monthsShown={2}
+            disabledKeyboardNavigation
+            monthsShown={3}
             selectsRange={!selectMode}
             startDate={startDate}
             endDate={endDate}
+            focusSelectedMonth
             minDate={selectMode ? startDate : null}
             maxDate={selectMode ? endDate : null}
             highlightDates={[
