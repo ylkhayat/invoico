@@ -43,6 +43,35 @@ const defaultEndDate = new Date(
 
 const ALL_COUNTRIES = Holidays.getCountries();
 
+const Indicator = ({
+  backgroundColor,
+  guide,
+}: {
+  backgroundColor: string;
+  guide: string;
+}) => {
+  return (
+    <div
+      style={{
+        flexDirection: "row",
+        display: "flex",
+        marginBottom: 10,
+      }}
+    >
+      <div
+        style={{
+          width: 20,
+          height: 20,
+          borderRadius: 5,
+          backgroundColor: backgroundColor,
+          marginRight: 10,
+        }}
+      />
+      <Text>{guide}</Text>
+    </div>
+  );
+};
+
 function App() {
   const [selectMode, setSelectMode] = useState(false);
   const [[startDate, endDate], setRangeDates] = useState<
@@ -78,7 +107,7 @@ function App() {
         <Title code>invoi.co</Title>
       </div>
 
-      <div style={{ marginBottom: 20, flexDirection: "row", display: "flex" }}>
+      <div style={{ marginBottom: 10, flexDirection: "row", display: "flex" }}>
         <Checkbox.Group
           options={options}
           defaultValue={defaultOptions}
@@ -87,11 +116,21 @@ function App() {
           }}
         />
       </div>
-      <div style={{ flexDirection: "row", display: "flex", marginBottom: 20 }}>
-        <Input
-          addonBefore="Working Hours"
-          onChange={(ev) => setWorkingHours(parseInt(ev.target.value, 10))}
-        />
+      <div
+        style={{
+          flexDirection: "row",
+          display: "flex",
+          marginBottom: 20,
+          justifyContent: "space-around",
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <Input
+            addonBefore="Working Hours"
+            width="50%"
+            onChange={(ev) => setWorkingHours(parseInt(ev.target.value, 10))}
+          />
+        </div>
       </div>
       <div className="Content-container">
         <DatePicker
@@ -137,6 +176,24 @@ function App() {
           isClearable={true}
         />
         <div style={{ flexDirection: "column", display: "flex" }}>
+          <div>
+            <Indicator
+              guide="Indicates Working Days 🙈"
+              backgroundColor="#3dcc4a"
+            />
+            <Indicator
+              guide="Indicates Holidays 🎉"
+              backgroundColor="#d319d3"
+            />
+            <Indicator
+              guide="Indicates selected vacations 🎯"
+              backgroundColor="#d32222"
+            />
+            <Indicator
+              guide="Indicates Selected Days for billing 🎯"
+              backgroundColor="#216ba5"
+            />
+          </div>
           <Button onClick={() => setSelectMode((prevMode) => !prevMode)}>
             {selectMode
               ? "Select your date range"
@@ -144,7 +201,9 @@ function App() {
           </Button>
 
           <div style={{ marginTop: 50, marginBottom: 20 }}>
-            <Text type="success">Holidays? No Problemo</Text>
+            <Text type="success">
+              Holidays? No Problemo! Pick your country!
+            </Text>
           </div>
           <Select
             showSearch
@@ -172,7 +231,7 @@ function App() {
 
         {
           <Text>
-            Expected Hours: {expectedHours ? expectedHours : "Loading..."}
+            Expected Hours: {expectedHours ? expectedHours : "^Click me^"}
           </Text>
         }
       </div>
