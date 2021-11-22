@@ -21,7 +21,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.177",
-    "@types/react-datepicker": "^4.3.2"
+    "@types/react-datepicker": "^4.3.2",
+    "serve": "^13.0.2"
   }
 }
