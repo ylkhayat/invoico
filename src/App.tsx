@@ -4,7 +4,7 @@ import { useInvoice } from "./hooks/useInvoice";
 import DatePicker from "react-datepicker";
 import isArray from "lodash/isArray";
 import "react-datepicker/dist/react-datepicker.css";
-import { Button, Typography } from "antd";
+import { Button, Modal, Typography } from "antd";
 import { Input } from "antd";
 import { Checkbox } from "antd";
 import { isDate } from "lodash";
@@ -13,7 +13,7 @@ import { Select } from "antd";
 const { Option } = Select;
 
 const Holidays = new HolidaysClass();
-const { Text, Title } = Typography;
+const { Text, Title, Paragraph, Link } = Typography;
 
 const options = [
   { label: "Sunday", value: "sun" },
@@ -73,6 +73,7 @@ const Indicator = ({
 };
 
 function App() {
+  const [helpMode, setHelpMode] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [[startDate, endDate], setRangeDates] = useState<
     [Date | null, Date | null]
@@ -105,8 +106,59 @@ function App() {
     <div className="App">
       <div style={{ marginBottom: 50 }}>
         <Title code>invoi.co</Title>
+        <Button onClick={() => setHelpMode((prevHelpMode) => !prevHelpMode)}>
+          Toggle the help!
+        </Button>
       </div>
-
+      {helpMode && (
+        <Modal
+          title="Helpful Modal"
+          visible={helpMode}
+          onOk={() => setHelpMode(false)}
+          onCancel={() => setHelpMode(false)}
+        >
+          <div style={{ marginBottom: 30 }}>
+            <Paragraph>
+              Howdie! Do not get confused, after reading this short paragraph
+              you will be able to get the most out of this humble project. I
+              will keep it short and simple. Promise!
+            </Paragraph>
+            <Paragraph>
+              <Text code>Week days (Checkboxes)</Text> First, you can see below
+              the days of the week, which basically represents the days you
+              usually work during the week. You can tick or untick it for
+              customisability.
+            </Paragraph>
+            <Paragraph>
+              <Text code>Datepicker</Text> Second, you can see the Date picker
+              which is the coolest part of the application. by default it has a
+              default range from 24 previous month to 23 this month (personal
+              preference). By default you have the selecting tool, you can click
+              anywhere on the calendar to assign the{" "}
+              <Text code>start date</Text> and click once again past it to
+              assign the <Text code>end date</Text>. There also exists another
+              mode where you can select the vacations that you took in order to
+              exclude them from the expected hours count through click on{" "}
+              <Text code>Manually select your vacations 🎉</Text> and then
+              proceed to picking your vacations and watch the magic happen.
+            </Paragraph>
+            <Paragraph>
+              <Text code>Holidays</Text> Third, this application supports
+              marking the holidays, so that you can know which days are off for
+              you according to your current location and further excluding them
+              also from expected hours. If you can't find your country feel free
+              to request it{" "}
+              <Link
+                href="https://github.com/yousseftarekkh/invoico/issues"
+                target="_blank"
+              >
+                here
+              </Link>
+              .
+            </Paragraph>
+          </div>
+        </Modal>
+      )}
       <div style={{ marginBottom: 10, flexDirection: "row", display: "flex" }}>
         <Checkbox.Group
           options={options}
